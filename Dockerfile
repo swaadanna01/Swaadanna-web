@@ -1,7 +1,7 @@
 # Build Frontend
 FROM node:20-alpine as build-step
 WORKDIR /app/frontend
-COPY frontend/package.json frontend/yarn.lock ./
+COPY frontend/package.json ./
 RUN yarn install
 COPY frontend/ ./
 RUN yarn build
