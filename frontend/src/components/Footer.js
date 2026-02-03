@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 
-const LOGO_URL = "https://customer-assets.emergentagent.com/job_fabd8294-10db-43c3-9bdf-c47cc2acaa58/artifacts/dfuce2tt_image.png";
+// Replace with your own logo
+const LOGO_URL = "/logo.png"; // Placeholder
 
 export const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -28,14 +29,14 @@ export const Footer = () => {
           {/* Brand Section */}
           <div className="lg:col-span-2">
             <Link to="/" className="inline-block mb-6">
-              <img 
-                src={LOGO_URL} 
-                alt="Swaadanna Logo" 
+              <img
+                src={LOGO_URL}
+                alt="Swaadanna Logo"
                 className="h-20 w-auto object-contain"
               />
             </Link>
             <p className="text-primary-foreground/80 font-sans text-sm leading-relaxed max-w-md mb-6">
-              Bringing the authentic taste of the Himalayas to your table. Our handcrafted pickles are made using 
+              Bringing the authentic taste of the Himalayas to your table. Our handcrafted pickles are made using
               traditional Pahadi recipes passed down through generations, with no preservatives and pure love.
             </p>
             {/* Social Links */}
@@ -84,8 +85,8 @@ export const Footer = () => {
                 <i className="fa-solid fa-envelope text-secondary mt-1"></i>
                 <div>
                   <p className="text-primary-foreground/60 text-xs font-sans mb-1">Email</p>
-                  <a 
-                    href="mailto:swaadannaorganics01@gmail.com" 
+                  <a
+                    href="mailto:swaadannaorganics01@gmail.com"
                     className="text-primary-foreground/90 hover:text-secondary font-sans text-sm transition-colors duration-200"
                   >
                     swaadannaorganics01@gmail.com
@@ -96,8 +97,8 @@ export const Footer = () => {
                 <i className="fa-solid fa-phone text-secondary mt-1"></i>
                 <div>
                   <p className="text-primary-foreground/60 text-xs font-sans mb-1">Phone</p>
-                  <a 
-                    href="tel:+918306094431" 
+                  <a
+                    href="tel:+918306094431"
                     className="text-primary-foreground/90 hover:text-secondary font-sans text-sm transition-colors duration-200"
                   >
                     +91 83060 94431

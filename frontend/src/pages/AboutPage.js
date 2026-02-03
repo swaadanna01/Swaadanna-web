@@ -3,7 +3,7 @@ import { features } from '@/data/products';
 
 const ABOUT_HERO = "https://images.unsplash.com/photo-1718894294953-92e3f9a17559?w=1920&h=800&fit=crop";
 const SPICES_IMG = "https://images.unsplash.com/photo-1624935984039-395c058e3944?w=800&h=600&fit=crop";
-const LOGO_URL = "https://customer-assets.emergentagent.com/job_fabd8294-10db-43c3-9bdf-c47cc2acaa58/artifacts/dfuce2tt_image.png";
+const LOGO_URL = "/logo.png";
 
 export const AboutPage = () => {
   const timeline = [
@@ -65,19 +65,19 @@ export const AboutPage = () => {
               </h2>
               <div className="space-y-4 font-sans text-muted-foreground leading-relaxed">
                 <p>
-                  Swaadanna was born from a simple desire - to share the authentic taste of our homeland 
-                  with the world. Growing up in the hills of Himachal Pradesh, we were surrounded by the 
-                  rich aromas of pickles being prepared in clay pots, honey being collected from wild hives, 
+                  Swaadanna was born from a simple desire - to share the authentic taste of our homeland
+                  with the world. Growing up in the hills of Himachal Pradesh, we were surrounded by the
+                  rich aromas of pickles being prepared in clay pots, honey being collected from wild hives,
                   and spices being ground on ancient stone slabs.
                 </p>
                 <p>
-                  These aren&apos;t just recipes to us - they&apos;re memories, traditions, and a way of life that 
-                  we want to preserve and share. Every jar of Swaadanna carries the essence of our mountains, 
+                  These aren&apos;t just recipes to us - they&apos;re memories, traditions, and a way of life that
+                  we want to preserve and share. Every jar of Swaadanna carries the essence of our mountains,
                   the warmth of our kitchens, and the love of countless generations.
                 </p>
                 <p>
-                  We believe in keeping things simple and pure. No preservatives, no artificial colors, 
-                  no shortcuts. Just authentic Pahadi flavors made the way they&apos;ve always been made - 
+                  We believe in keeping things simple and pure. No preservatives, no artificial colors,
+                  no shortcuts. Just authentic Pahadi flavors made the way they&apos;ve always been made -
                   with patience, care, and respect for tradition.
                 </p>
               </div>
@@ -177,7 +177,7 @@ export const AboutPage = () => {
                 Our Core Values
               </h2>
               <p className="font-sans text-accent-foreground/80 mb-8 leading-relaxed">
-                At Swaadanna, our values guide everything we do - from sourcing ingredients to 
+                At Swaadanna, our values guide everything we do - from sourcing ingredients to
                 delivering the final product to your doorstep.
               </p>
             </div>

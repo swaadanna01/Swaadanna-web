@@ -87,3 +87,31 @@ logger = logging.getLogger(__name__)
 @app.on_event("shutdown")
 async def shutdown_db_client():
     client.close()
+
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+
+# Serve React App
+# Mount the static files from the build directory
+# We go up one level from 'backend' to root, then into 'frontend/build'
+# Since WORKDIR in Docker is /app/backend, and we copied frontend/build to /app/frontend/build
+# The relative path from backend/server.py (if running in backend dir) to ../frontend/build
+build_dir = Path(__file__).parent.parent / "frontend" / "build"
+
+if build_dir.exists():
+    app.mount("/static", StaticFiles(directory=build_dir / "static"), name="static")
+    
+    # Catch-all route to serve index.html for client-side routing
+    @app.get("/{full_path:path}")
+    async def serve_react_app(full_path: str):
+        # Allow API calls to pass through (though they should be caught by prefix above)
+        if full_path.startswith("api"):
+             return {"error": "Not Found"}
+        
+        # Check if a specific file is requested (e.g. manifest.json, favicon.ico)
+        file_path = build_dir / full_path
+        if file_path.exists() and file_path.is_file():
+            return FileResponse(file_path)
+            
+        # Otherwise return index.html
+        return FileResponse(build_dir / "index.html")
