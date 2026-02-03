@@ -31,7 +31,7 @@ export const Footer = () => {
               <img 
                 src={LOGO_URL} 
                 alt="Swaadanna Logo" 
-                className="h-20 w-auto object-contain brightness-0 invert"
+                className="h-20 w-auto object-contain"
               />
             </Link>
             <p className="text-primary-foreground/80 font-sans text-sm leading-relaxed max-w-md mb-6">
