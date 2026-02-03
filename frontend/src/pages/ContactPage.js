@@ -89,7 +89,7 @@ export const ContactPage = () => {
             </h1>
             <p className="font-sans text-lg text-muted-foreground max-w-2xl mx-auto">
               Have questions about our products or want to place a bulk order? 
-              We'd love to hear from you!
+              We&apos;d love to hear from you!
             </p>
           </div>
         </div>
@@ -132,7 +132,7 @@ export const ContactPage = () => {
                 Send Us a Message
               </h2>
               <p className="font-sans text-muted-foreground mb-8">
-                Fill out the form below and we'll get back to you as soon as possible.
+                Fill out the form below and we&apos;ll get back to you as soon as possible.
               </p>
 
               <form onSubmit={handleSubmit} className="space-y-6">

@@ -207,7 +207,7 @@ export const HomePage = () => {
               The Swaadanna Difference
             </h2>
             <p className="font-sans text-muted-foreground max-w-2xl mx-auto">
-              What makes our pickles and honey special? It's the love, tradition, and purity in every jar.
+              What makes our pickles and honey special? It&apos;s the love, tradition, and purity in every jar.
             </p>
           </div>
 
@@ -249,7 +249,7 @@ export const HomePage = () => {
                     ))}
                   </div>
                   <p className="font-sans text-foreground/80 mb-6 leading-relaxed italic">
-                    "{testimonial.text}"
+                    &ldquo;{testimonial.text}&rdquo;
                   </p>
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">

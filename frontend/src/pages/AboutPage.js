@@ -71,13 +71,13 @@ export const AboutPage = () => {
                   and spices being ground on ancient stone slabs.
                 </p>
                 <p>
-                  These aren't just recipes to us - they're memories, traditions, and a way of life that 
+                  These aren&apos;t just recipes to us - they&apos;re memories, traditions, and a way of life that 
                   we want to preserve and share. Every jar of Swaadanna carries the essence of our mountains, 
                   the warmth of our kitchens, and the love of countless generations.
                 </p>
                 <p>
                   We believe in keeping things simple and pure. No preservatives, no artificial colors, 
-                  no shortcuts. Just authentic Pahadi flavors made the way they've always been made - 
+                  no shortcuts. Just authentic Pahadi flavors made the way they&apos;ve always been made - 
                   with patience, care, and respect for tradition.
                 </p>
               </div>
