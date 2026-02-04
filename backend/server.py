@@ -126,8 +126,10 @@ def send_order_email(order: Order):
     except Exception as e:
         print(f"Failed to send email: {e}")
 
+from fastapi import BackgroundTasks
+
 @api_router.post("/orders", response_model=Order)
-async def create_order(input: OrderCreate):
+async def create_order(input: OrderCreate, background_tasks: BackgroundTasks):
     order_dict = input.model_dump()
     order_obj = Order(**order_dict)
     
@@ -137,8 +139,8 @@ async def create_order(input: OrderCreate):
     if db is not None:
         await db.orders.insert_one(doc)
     
-    # Send email in background (synchronous for now, ideally background task)
-    send_order_email(order_obj)
+    # Send email in background using FastAPI BackgroundTasks
+    background_tasks.add_task(send_order_email, order_obj)
     
     return order_obj
 
@@ -174,10 +176,13 @@ async def get_status_checks():
 # Include the router in the main app
 app.include_router(api_router)
 
+# Configure CORS
+origins = os.environ.get('CORS_ORIGINS', '*').split(',')
+
 app.add_middleware(
     CORSMiddleware,
-    allow_credentials=True,
-    allow_origins=os.environ.get('CORS_ORIGINS', '*').split(','),
+    allow_credentials=(origins != ['*']), # Disable credentials if allowing all origins to avoid browser errors
+    allow_origins=origins,
     allow_methods=["*"],
     allow_headers=["*"],
 )
