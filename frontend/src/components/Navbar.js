@@ -1,5 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useState } from 'react';
+import { useCart } from '@/context/CartContext';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 
@@ -9,6 +10,7 @@ const LOGO_URL = "/logo.png";
 export const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+  const { getCartCount } = useCart();
 
   const navLinks = [
     { name: 'Home', path: '/' },
@@ -54,13 +56,27 @@ export const Navbar = () => {
           </div>
 
           {/* Shop Now Button - Desktop */}
-          <div className="hidden md:block">
+          <div className="hidden md:flex items-center gap-4">
             <Link to="/products">
               <Button
                 className="bg-primary hover:bg-primary/90 text-primary-foreground font-sans font-medium px-6 py-2 rounded-full transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5"
               >
                 Shop Now
               </Button>
+            </Link>
+          </div>
+
+          {/* Cart Icon - Desktop */}
+          <div className="hidden md:flex items-center ml-4">
+            <Link to="/cart" className="relative group">
+              <Button variant="ghost" size="icon" className="text-foreground hover:text-primary transition-colors">
+                <i className="fa-solid fa-cart-shopping text-xl"></i>
+              </Button>
+              {getCartCount() > 0 && (
+                <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center animate-in zoom-in duration-300">
+                  {getCartCount()}
+                </span>
+              )}
             </Link>
           </div>
 

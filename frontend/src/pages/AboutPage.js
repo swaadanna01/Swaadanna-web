@@ -60,15 +60,13 @@ export const AboutPage = () => {
                 Taste the Origin
               </span>
               <h2 className="font-serif text-3xl sm:text-4xl font-bold text-foreground mb-6 leading-tight">
-                Pahaad ka Achaar,<br />
-                <span className="text-primary">Dil ka Swaad</span>
+                Swaad + Ann made = <br />
+                <span className="text-primary">Swaadanna tasty food</span>
               </h2>
               <div className="space-y-4 font-sans text-muted-foreground leading-relaxed">
                 <p>
-                  Swaadanna was born from a simple desire - to share the authentic taste of our homeland
-                  with the world. Growing up in the hills of Himachal Pradesh, we were surrounded by the
-                  rich aromas of pickles being prepared in clay pots, honey being collected from wild hives,
-                  and spices being ground on ancient stone slabs.
+                  Swaadanna brings you the authentic taste of homemade goodness. We believe that food
+                  should be simple, pure, and full of love - just like home.
                 </p>
                 <p>
                   These aren&apos;t just recipes to us - they&apos;re memories, traditions, and a way of life that

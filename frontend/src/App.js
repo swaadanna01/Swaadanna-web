@@ -8,24 +8,31 @@ import { ProductsPage } from "@/pages/ProductsPage";
 import { AboutPage } from "@/pages/AboutPage";
 import { ContactPage } from "@/pages/ContactPage";
 import { PaymentPage } from "@/pages/PaymentPage";
+import { CartPage } from "@/pages/CartPage";
+import { CheckoutPage } from "@/pages/CheckoutPage";
+import { CartProvider } from "@/context/CartContext";
 
 function App() {
   return (
     <div className="App min-h-screen bg-background">
-      <BrowserRouter>
-        <Navbar />
-        <main>
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/products" element={<ProductsPage />} />
-            <Route path="/about" element={<AboutPage />} />
-            <Route path="/contact" element={<ContactPage />} />
-            <Route path="/payment" element={<PaymentPage />} />
-          </Routes>
-        </main>
-        <Footer />
-        <Toaster position="top-right" richColors />
-      </BrowserRouter>
+      <CartProvider>
+        <BrowserRouter>
+          <Navbar />
+          <main>
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/products" element={<ProductsPage />} />
+              <Route path="/about" element={<AboutPage />} />
+              <Route path="/contact" element={<ContactPage />} />
+              <Route path="/payment" element={<PaymentPage />} />
+              <Route path="/cart" element={<CartPage />} />
+              <Route path="/checkout" element={<CheckoutPage />} />
+            </Routes>
+          </main>
+          <Footer />
+          <Toaster position="top-right" richColors />
+        </BrowserRouter>
+      </CartProvider>
     </div>
   );
 }

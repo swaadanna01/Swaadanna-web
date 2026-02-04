@@ -53,6 +53,95 @@ class StatusCheck(BaseModel):
 class StatusCheckCreate(BaseModel):
     client_name: str
 
+class OrderItem(BaseModel):
+    product_id: int
+    name: str
+    quantity: int
+    price: float
+
+class OrderCreate(BaseModel):
+    customer_name: str
+    customer_email: str
+    phone: str
+    address: str
+    products: List[OrderItem]
+    total_amount: float
+    payment_method: str
+
+class Order(OrderCreate):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    order_id: str = Field(default_factory=lambda: f"ORD-{uuid.uuid4().hex[:8].upper()}")
+    timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+
+def send_order_email(order: Order):
+    smtp_server = os.environ.get('SMTP_SERVER', 'smtp.gmail.com')
+    smtp_port = int(os.environ.get('SMTP_PORT', 587))
+    smtp_username = os.environ.get('SMTP_USERNAME')
+    smtp_password = os.environ.get('SMTP_PASSWORD')
+    admin_email = os.environ.get('ADMIN_EMAIL')
+
+    if not all([smtp_username, smtp_password, admin_email]):
+        print("Skipping email: SMTP credentials not provided.")
+        return
+
+    msg = MIMEMultipart()
+    msg['From'] = smtp_username
+    msg['To'] = admin_email
+    msg['Subject'] = f"New Order Received: {order.order_id}"
+
+    product_lines = "\n".join([f"- {p.name} (x{p.quantity}): ₹{p.price * p.quantity}" for p in order.products])
+    
+    body = f"""
+    New Order Received!
+    
+    Order ID: {order.order_id}
+    Time: {order.timestamp}
+    
+    Customer Details:
+    Name: {order.customer_name}
+    Email: {order.customer_email}
+    Phone: {order.phone}
+    Address: {order.address}
+    
+    Order Summary:
+    {product_lines}
+    
+    Total Amount: ₹{order.total_amount}
+    Payment Method: {order.payment_method}
+    """
+    
+    msg.attach(MIMEText(body, 'plain'))
+
+    try:
+        server = smtplib.SMTP(smtp_server, smtp_port)
+        server.starttls()
+        server.login(smtp_username, smtp_password)
+        server.send_message(msg)
+        server.quit()
+        print(f"Order email sent for {order.order_id}")
+    except Exception as e:
+        print(f"Failed to send email: {e}")
+
+@api_router.post("/orders", response_model=Order)
+async def create_order(input: OrderCreate):
+    order_dict = input.model_dump()
+    order_obj = Order(**order_dict)
+    
+    doc = order_obj.model_dump()
+    doc['timestamp'] = doc['timestamp'].isoformat()
+    
+    if db is not None:
+        await db.orders.insert_one(doc)
+    
+    # Send email in background (synchronous for now, ideally background task)
+    send_order_email(order_obj)
+    
+    return order_obj
+
 # Add your routes to the router instead of directly to app
 @api_router.get("/")
 async def root():
