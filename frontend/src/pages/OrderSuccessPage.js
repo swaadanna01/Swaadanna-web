@@ -17,7 +17,7 @@ const OrderSuccessPage = () => {
         const fetchOrder = async () => {
             try {
                 const API_URL =
-                    process.env.REACT_APP_API_URL || `http://${window.location.hostname}:8000/api`;
+                    process.env.REACT_APP_API_URL || 'https://swaadanna.shop/api';
 
                 const res = await axios.get(`${API_URL}/orders/${orderId}`);
                 setOrder(res.data);

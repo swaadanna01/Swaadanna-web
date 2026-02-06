@@ -55,8 +55,8 @@ export const CheckoutPage = () => {
                 payment_method: formData.paymentMethod
             };
 
-            // Dynamic API URL for local network access
-            const API_URL = process.env.REACT_APP_API_URL || `http://${window.location.hostname}:8000/api`;
+            // API URL
+            const API_URL = process.env.REACT_APP_API_URL || 'https://swaadanna.shop/api';
 
             const response = await axios.post(`${API_URL}/orders`, orderData);
 
