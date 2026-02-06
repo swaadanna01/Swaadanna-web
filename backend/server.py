@@ -214,6 +214,20 @@ async def create_order(input: OrderCreate, background_tasks: BackgroundTasks):
     
     return order_obj
 
+@api_router.get("/orders/{order_id}", response_model=Order)
+async def get_order(order_id: str):
+    # Try fetching from MongoDB first
+    if db is not None:
+        doc = await db.orders.find_one({"order_id": order_id}, {"_id": 0})
+        if doc:
+            if isinstance(doc.get('timestamp'), str):
+                 doc['timestamp'] = datetime.fromisoformat(doc['timestamp'])
+            return doc
+    
+    # Optional: Implement NocoDB fallback here if needed
+    from fastapi import HTTPException
+    raise HTTPException(status_code=404, detail="Order not found")
+
 # Add your routes to the router instead of directly to app
 @api_router.get("/")
 async def root():

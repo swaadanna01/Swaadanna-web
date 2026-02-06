@@ -10,6 +10,7 @@ import { ContactPage } from "@/pages/ContactPage";
 import { PaymentPage } from "@/pages/PaymentPage";
 import { CartPage } from "@/pages/CartPage";
 import { CheckoutPage } from "@/pages/CheckoutPage";
+import OrderSuccessPage from "@/pages/OrderSuccessPage";
 import { CartProvider } from "@/context/CartContext";
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
               <Route path="/payment" element={<PaymentPage />} />
               <Route path="/cart" element={<CartPage />} />
               <Route path="/checkout" element={<CheckoutPage />} />
+              <Route path="/order-success/:orderId" element={<OrderSuccessPage />} />
             </Routes>
           </main>
           <Footer />

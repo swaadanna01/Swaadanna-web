@@ -55,10 +55,10 @@ export const CheckoutPage = () => {
                 payment_method: formData.paymentMethod
             };
 
-            // Replace with your actual backend URL in production
-            const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000/api';
+            // Dynamic API URL for local network access
+            const API_URL = process.env.REACT_APP_API_URL || `http://${window.location.hostname}:8000/api`;
 
-            await axios.post(`${API_URL}/orders`, orderData);
+            const response = await axios.post(`${API_URL}/orders`, orderData);
 
             toast.success('Order placed successfully!', {
                 description: 'Check your email for confirmation.',
@@ -66,7 +66,9 @@ export const CheckoutPage = () => {
             });
 
             clearCart();
-            navigate('/');
+            // Redirect to success page with order ID
+            const orderId = response.data.order_id;
+            navigate(`/order-success/${orderId}`);
 
         } catch (error) {
             console.error('Order submission failed:', error);
