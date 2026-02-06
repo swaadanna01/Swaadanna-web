@@ -199,6 +199,22 @@ export const CheckoutPage = () => {
                                     <i className="fa-solid fa-money-bill-wave text-xl text-muted-foreground"></i>
                                 </div>
                             </RadioGroup>
+
+                            {formData.paymentMethod === 'upi' && (
+                                <div className="mt-4 p-4 border rounded-lg bg-gray-50 flex flex-col items-center animate-in fade-in slide-in-from-top-2 duration-300">
+                                    <p className="font-medium mb-2">Scan QR to Pay</p>
+                                    <div className="bg-white p-2 rounded shadow-sm">
+                                        <img
+                                            src="/payment-qr.jpg"
+                                            alt="Payment QR Code"
+                                            className="w-48 h-48 object-contain"
+                                        />
+                                    </div>
+                                    <p className="text-xs text-muted-foreground mt-2">
+                                        Scan using GPay, PhonePe, or any UPI app
+                                    </p>
+                                </div>
+                            )}
                         </CardContent>
                     </Card>
 

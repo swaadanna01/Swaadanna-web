@@ -9,6 +9,7 @@ from pydantic import BaseModel, Field, ConfigDict
 from typing import List
 import uuid
 from datetime import datetime, timezone
+import requests
 
 
 ROOT_DIR = Path(__file__).parent
@@ -22,7 +23,10 @@ db = None
 
 if mongo_url:
     try:
-        client = AsyncIOMotorClient(mongo_url)
+        # Create a new client and connect to the server
+        # tlsAllowInvalidCertificates=True is needed to bypass SSL handshake errors on some macOS environments
+        # NocoDB is now the primary storage
+        client = AsyncIOMotorClient(mongo_url, tlsAllowInvalidCertificates=True)
         # Default to 'test' if DB_NAME not set
         db_name = os.environ.get('DB_NAME', 'test')
         db = client[db_name]
@@ -76,6 +80,65 @@ class Order(OrderCreate):
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+
+def save_to_nocodb(order: Order):
+    """
+    Saves the order to NocoDB.
+    """
+    try:
+        token = os.environ.get("NOCODB_API_TOKEN")
+        table_id = os.environ.get("NOCODB_TABLE_ID")
+        view_id = os.environ.get("NOCODB_VIEW_ID", "")
+        
+        if not token or not table_id:
+            print("Skipping NocoDB save: Credentials not found.")
+            return False
+
+        url = f"https://app.nocodb.com/api/v2/tables/{table_id}/records"
+        
+        headers = {
+            "xc-token": token,
+            "Content-Type": "application/json"
+        }
+        
+        # Construct the payload based on order object
+        # User requested products to be a JSON object
+        products_json = [p.model_dump() for p in order.products]
+        
+        # Map payment method to NocoDB expected values
+        nocodb_payment_method = order.payment_method
+        if nocodb_payment_method in ['qr_code', 'upi']:
+            nocodb_payment_method = 'QR_Code'
+        elif nocodb_payment_method == 'cod':
+            nocodb_payment_method = 'COD'
+            
+        data = {
+            "order_id": order.order_id,
+            "customer_name": order.customer_name,
+            "customer_email": order.customer_email,
+            "phone": order.phone,
+            "address": order.address,
+            "total_amount": order.total_amount,
+            "payment_method": nocodb_payment_method,
+            "products": products_json,  # Sending as JSON object/array
+            "timestamp": order.timestamp.isoformat()
+        }
+
+        response = requests.post(url, headers=headers, json=data)
+        
+        if response.status_code in [200, 201]:
+            print(f"Order saved to NocoDB: {order.order_id}")
+            return True
+        else:
+            print(f"Failed to save to NocoDB: {response.status_code} - {response.text}")
+            logger.error(f"Failed to save to NocoDB: {response.text}")
+            return False
+
+    except Exception as e:
+        print(f"Error saving to NocoDB: {e}")
+        logger.error(f"Error saving to NocoDB: {e}")
+        return False
+
 
 def send_order_email(order: Order):
     smtp_server = os.environ.get('SMTP_SERVER', 'smtp.gmail.com')
@@ -136,8 +199,15 @@ async def create_order(input: OrderCreate, background_tasks: BackgroundTasks):
     doc = order_obj.model_dump()
     doc['timestamp'] = doc['timestamp'].isoformat()
     
+    # Save to NocoDB (Primary storage now)
+    background_tasks.add_task(save_to_nocodb, order_obj)
+    
+    # Optional: Still try to save to MongoDB if configured, but don't error out
     if db is not None:
-        await db.orders.insert_one(doc)
+        try:
+            await db.orders.insert_one(doc)
+        except Exception as e:
+            print(f"MongoDB save failed (non-critical): {e}")
     
     # Send email in background using FastAPI BackgroundTasks
     background_tasks.add_task(send_order_email, order_obj)
