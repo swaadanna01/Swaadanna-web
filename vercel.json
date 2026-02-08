@@ -20,7 +20,7 @@
             "destination": "/backend/server.py"
         },
         {
-            "source": "/((?!api/|logo.png|favicon.ico|manifest.json|static/).*)",
+            "source": "/(.*)",
             "destination": "/index.html"
         }
     ]
