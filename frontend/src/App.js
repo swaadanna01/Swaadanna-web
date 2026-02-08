@@ -14,6 +14,7 @@ import OrderSuccessPage from "@/pages/OrderSuccessPage";
 import { CartProvider } from "@/context/CartContext";
 import AdminLoginPage from "@/pages/AdminLoginPage";
 import AdminOrdersPage from "@/pages/AdminOrdersPage";
+import NotFoundPage from "@/pages/NotFoundPage";
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
               <Route path="/order-success/:orderId" element={<OrderSuccessPage />} />
               <Route path="/count/a=a/adps" element={<AdminLoginPage />} />
               <Route path="/count/a=a/adps/dashboard" element={<AdminOrdersPage />} />
+              <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </main>
           <Footer />
