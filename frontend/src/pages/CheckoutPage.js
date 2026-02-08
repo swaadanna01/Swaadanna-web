@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useCart } from '@/context/CartContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -55,20 +55,40 @@ export const CheckoutPage = () => {
                 payment_method: formData.paymentMethod
             };
 
-            // API URL
-            const API_URL = process.env.REACT_APP_API_URL || 'https://swaadanna.shop/api';
+            // API URL - Using production domain
+            // const isLocal = window.location.hostname === 'localhost';
+            // const API_URL = process.env.REACT_APP_API_URL || (isLocal ? 'http://localhost:8000/api' : 'https://swaadanna.shop/api');
+            const API_URL = process.env.REACT_APP_API_URL || 'https://www.swaadanna.shop/api';
 
             const response = await axios.post(`${API_URL}/orders`, orderData);
+            const savedOrder = response.data;
+
+            // Generate WhatsApp message for admin
+            const adminPhone = "919596937000";
+            const productsList = savedOrder.products.map(p => `- ${p.name} (x${p.quantity}): ₹${p.price * p.quantity}`).join('\n');
+            const message = `*New Order from Swaadanna!* 🌿\n\n` +
+                `*Order ID:* ${savedOrder.order_id}\n\n` +
+                `*Customer Details:*\n` +
+                `Name: ${savedOrder.customer_name}\n` +
+                `Phone: ${savedOrder.phone}\n` +
+                `Address: ${savedOrder.address}\n\n` +
+                `*Order Summary:*\n${productsList}\n\n` +
+                `*Total Amount:* ₹${savedOrder.total_amount}\n` +
+                `*Payment Method:* ${savedOrder.payment_method}`;
+
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappUrl = `https://wa.me/${adminPhone}?text=${encodedMessage}`;
 
             toast.success('Order placed successfully!', {
-                description: 'Check your email for confirmation.',
-                duration: 5000,
+                description: 'Your order will be confirmed soon. Redirecting...',
+                duration: 3000,
             });
 
-            clearCart();
-            // Redirect to success page with order ID
-            const orderId = response.data.order_id;
-            navigate(`/order-success/${orderId}`);
+            // Navigate directly to success page without manual WhatsApp redirect
+            setTimeout(() => {
+                clearCart();
+                navigate(`/order-success/${savedOrder.order_id}`);
+            }, 1500);
 
         } catch (error) {
             console.error('Order submission failed:', error);
@@ -78,8 +98,13 @@ export const CheckoutPage = () => {
         }
     };
 
+    useEffect(() => {
+        if (cart.length === 0) {
+            navigate('/products');
+        }
+    }, [cart, navigate]);
+
     if (cart.length === 0) {
-        navigate('/products');
         return null;
     }
 

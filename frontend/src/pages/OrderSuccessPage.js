@@ -17,7 +17,8 @@ const OrderSuccessPage = () => {
         const fetchOrder = async () => {
             try {
                 const API_URL =
-                    process.env.REACT_APP_API_URL || 'https://swaadanna.shop/api';
+                    process.env.REACT_APP_API_URL || 'https://www.swaadanna.shop/api';
+                // process.env.REACT_APP_API_URL || 'https://swaadanna.shop/api';
 
                 const res = await axios.get(`${API_URL}/orders/${orderId}`);
                 setOrder(res.data);
@@ -68,8 +69,8 @@ const OrderSuccessPage = () => {
                     <h1 className="font-serif text-3xl font-bold mb-2">
                         Order Placed Successfully!
                     </h1>
-                    <p className="text-muted-foreground">
-                        Thank you for shopping with Swaadanna.
+                    <p className="text-muted-foreground font-medium text-lg text-primary">
+                        Your order will be confirmed soon. Further communication will be done via WhatsApp.
                     </p>
                 </div>
 

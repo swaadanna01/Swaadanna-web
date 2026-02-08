@@ -12,6 +12,8 @@ import { CartPage } from "@/pages/CartPage";
 import { CheckoutPage } from "@/pages/CheckoutPage";
 import OrderSuccessPage from "@/pages/OrderSuccessPage";
 import { CartProvider } from "@/context/CartContext";
+import AdminLoginPage from "@/pages/AdminLoginPage";
+import AdminOrdersPage from "@/pages/AdminOrdersPage";
 
 function App() {
   return (
@@ -29,6 +31,8 @@ function App() {
               <Route path="/cart" element={<CartPage />} />
               <Route path="/checkout" element={<CheckoutPage />} />
               <Route path="/order-success/:orderId" element={<OrderSuccessPage />} />
+              <Route path="/count/a=a/adps" element={<AdminLoginPage />} />
+              <Route path="/count/a=a/adps/dashboard" element={<AdminOrdersPage />} />
             </Routes>
           </main>
           <Footer />
