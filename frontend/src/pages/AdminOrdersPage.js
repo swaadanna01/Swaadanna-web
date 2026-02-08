@@ -17,16 +17,7 @@ const AdminOrdersPage = () => {
     const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://www.swaadanna.shop/api';
     // const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000/api';
 
-    useEffect(() => {
-        const isAuthenticated = localStorage.getItem('isAdminAuthenticated');
-        if (isAuthenticated !== 'true') {
-            navigate('/count/a=a/adps');
-        } else {
-            fetchOrders();
-        }
-    }, [navigate]);
-
-    const fetchOrders = async () => {
+    const fetchOrders = React.useCallback(async () => {
         try {
             setLoading(true);
             const res = await axios.get(`${API_BASE_URL}/orders`);
@@ -36,7 +27,16 @@ const AdminOrdersPage = () => {
             console.error('Error fetching orders:', err);
             setLoading(false);
         }
-    };
+    }, [API_BASE_URL]);
+
+    useEffect(() => {
+        const isAuthenticated = localStorage.getItem('isAdminAuthenticated');
+        if (isAuthenticated !== 'true') {
+            navigate('/count/a=a/adps');
+        } else {
+            fetchOrders();
+        }
+    }, [navigate, fetchOrders]);
 
     const filteredOrders = useMemo(() => {
         return orders.filter(order => {
