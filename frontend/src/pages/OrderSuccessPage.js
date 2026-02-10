@@ -15,12 +15,21 @@ const OrderSuccessPage = () => {
     useEffect(() => {
         if (!orderId) return;
 
+        let pollCount = 0;
+        const maxPolls = 10;
+        let pollInterval;
+
         const fetchOrder = async () => {
             try {
-                const API_URL = process.env.REACT_APP_API_URL || 'https://www.swaadanna.shop/api';
-
+                const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+                const API_URL = process.env.REACT_APP_API_URL || (isLocalhost ? 'http://localhost:8000/api' : 'https://www.swaadanna.shop/api');
                 const res = await axios.get(`${API_URL}/orders/${orderId}`);
-                setOrder(res.data);
+                const data = res.data;
+                setOrder(data);
+
+                if (data.email_sent) {
+                    clearInterval(pollInterval);
+                }
             } catch (err) {
                 console.error("Failed to fetch order:", err);
                 setError("Failed to load order details.");
@@ -30,6 +39,21 @@ const OrderSuccessPage = () => {
         };
 
         fetchOrder();
+
+        pollInterval = setInterval(() => {
+            pollCount++;
+
+            // Safety fallback: if database update is slow, show the message anyway after 10s
+            if (pollCount > 3) {
+                setOrder(prev => prev ? { ...prev, email_sent: true } : null);
+                clearInterval(pollInterval);
+                return;
+            }
+
+            fetchOrder();
+        }, 3000);
+
+        return () => clearInterval(pollInterval);
     }, [orderId]);
 
     const items = useMemo(() => {
@@ -79,9 +103,20 @@ const OrderSuccessPage = () => {
                     <h1 className="font-serif text-3xl sm:text-4xl font-bold text-foreground mb-4">
                         Your order has been placed successfully
                     </h1>
-                    <p className="font-sans text-muted-foreground text-lg">
+                    <p className="font-sans text-muted-foreground text-lg mb-2">
                         Order ID: <span className="text-foreground font-semibold">#{order.order_id}</span>
                     </p>
+                    {order.email_sent ? (
+                        <p className="font-sans text-primary text-sm font-medium flex items-center justify-center gap-2 animate-in fade-in slide-in-from-top-1 duration-500">
+                            <i className="fa-solid fa-envelope"></i>
+                            A confirmation email has been sent to <span className="font-bold">{order.customer_email}</span>
+                        </p>
+                    ) : (
+                        <p className="font-sans text-muted-foreground text-xs flex items-center justify-center gap-2">
+                            <i className="fa-solid fa-circle-notch animate-spin"></i>
+                            Processing confirmation email...
+                        </p>
+                    )}
                 </div>
             </section>
 

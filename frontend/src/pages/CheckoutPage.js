@@ -64,10 +64,13 @@ export const CheckoutPage = () => {
                 payment_method: 'upi' // Defaulting to UPI as requested to remove option
             };
 
-            const API_URL = process.env.REACT_APP_API_URL || 'https://www.swaadanna.shop/api';
+            const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+            const API_URL = process.env.REACT_APP_API_URL || (isLocalhost ? 'http://localhost:8000/api' : 'https://www.swaadanna.shop/api');
 
+            console.log('Attempting to place order to:', API_URL);
             const response = await axios.post(`${API_URL}/orders`, orderData);
             const savedOrder = response.data;
+            console.log('Order saved successfully:', savedOrder);
 
             // Generate WhatsApp message for admin
             const adminPhone = "919596937000";

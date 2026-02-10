@@ -24,6 +24,19 @@ app = FastAPI()
 # Create a router with the /api prefix
 api_router = APIRouter(prefix="/api")
 
+import traceback
+from fastapi import Request
+from fastapi.responses import JSONResponse
+
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    logger.error(f"Unhandled Exception: {exc}")
+    logger.error(traceback.format_exc())
+    return JSONResponse(
+        status_code=500,
+        content={"message": "Internal Server Error", "detail": str(exc)},
+    )
+
 
 # Define Models
 # Define Models
@@ -32,6 +45,7 @@ class OrderItem(BaseModel):
     name: str
     quantity: int
     price: float
+    image: str = None
 
 class OrderCreate(BaseModel):
     model_config = ConfigDict(extra="ignore")
@@ -43,6 +57,7 @@ class OrderCreate(BaseModel):
     total_amount: float
     payment_method: str
     status: str = "Pending"
+    email_sent: bool = False
 
 class Order(OrderCreate):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
@@ -96,6 +111,7 @@ def save_to_nocodb(order: Order):
             "products": products_json,  # Sending as JSON object/array
             "timestamp": order.timestamp.isoformat(),
             "status": order.status,
+            "email_sent": order.email_sent,
             "admin_token": order.admin_token
         }
 
@@ -221,6 +237,9 @@ async def list_orders():
                 doc['payment_method'] = 'qr_code'
             elif pm == 'COD':
                 doc['payment_method'] = 'cod'
+            
+            # Ensure email_sent is a boolean
+            doc['email_sent'] = bool(doc.get('email_sent'))
         
         return recs
             
@@ -313,8 +332,7 @@ def notify_admin_of_order(order: Order):
         f"Phone: {order.phone}\n"
         f"Address: {order.address}\n\n"
         f"*Order Summary:*\n{products_list}\n\n"
-        f"*Total Amount:* ₹{order.total_amount}\n"
-        f"*Payment Method:* {order.payment_method}"
+        f"*Total Amount:* ₹{order.total_amount}"
     )
     
     print(f"DEBUG: Attempting to notify admin {admin_phone} for Order {order.order_id}")
@@ -324,57 +342,166 @@ def notify_admin_of_order(order: Order):
     else:
         print(f"DEBUG: WhatsApp failed for Order {order.order_id}")
 
+def update_nocodb_email_status(order_id: str, email_sent: bool):
+    """
+    Updates the email_sent flag in NocoDB to track delivery.
+    """
+    try:
+        token = os.environ.get("NOCODB_API_TOKEN")
+        table_id = os.environ.get("NOCODB_TABLE_ID")
+        
+        if not token or not table_id:
+            return False
 
+        # Find record ID by order_id
+        import urllib.parse
+        q = urllib.parse.quote(f"(order_id,eq,{order_id})")
+        url_find = f"https://app.nocodb.com/api/v2/tables/{table_id}/records?where={q}"
+        headers = {"xc-token": token}
+        
+        response_find = requests.get(url_find, headers=headers)
+        if response_find.status_code == 200:
+            recs = response_find.json().get('list', [])
+            if not recs:
+                return False
+            
+            record_id = recs[0].get('Id') or recs[0].get('id')
+            
+            # Patch the record
+            url_patch = f"https://app.nocodb.com/api/v2/tables/{table_id}/records"
+            data = {"Id": record_id, "email_sent": email_sent}
+            requests.patch(url_patch, headers=headers, json=data)
+            return True
+            
+    except Exception as e:
+        print(f"Error updating email status: {e}")
+    return False
 
-
-def send_order_email(order: Order):
-    smtp_server = os.environ.get('SMTP_SERVER', 'smtp.gmail.com')
+def send_order_confirmation_email(order: Order):
+    """
+    Unified utility to send order confirmation using a single SMTP connection.
+    """
+    smtp_server = os.environ.get('SMTP_SERVER', 'smtp.gmail.com').strip()
     smtp_port = int(os.environ.get('SMTP_PORT', 587))
-    smtp_username = os.environ.get('SMTP_USERNAME')
-    smtp_password = os.environ.get('SMTP_PASSWORD')
-    admin_email = os.environ.get('ADMIN_EMAIL')
+    smtp_username = os.environ.get('SMTP_USERNAME', '').strip()
+    smtp_password = os.environ.get('SMTP_PASSWORD', '').strip()
+    admin_email = os.environ.get('ADMIN_EMAIL', 'swaadanna01@gmail.com').strip()
 
-    if not all([smtp_username, smtp_password, admin_email]):
-        print("Skipping email: SMTP credentials not provided.")
+    if not all([smtp_username, smtp_password]):
+        print("❌ [EMAIL] SMTP credentials missing.")
         return
 
-    msg = MIMEMultipart()
-    msg['From'] = smtp_username
-    msg['To'] = admin_email
-    msg['Subject'] = f"New Order Received: {order.order_id}"
-
-    product_lines = "\n".join([f"- {p.name} (x{p.quantity}): ₹{p.price * p.quantity}" for p in order.products])
-    
-    body = f"""
-    New Order Received!
-    
-    Order ID: {order.order_id}
-    Time: {order.timestamp}
-    
-    Customer Details:
-    Name: {order.customer_name}
-    Email: {order.customer_email}
-    Phone: {order.phone}
-    Address: {order.address}
-    
-    Order Summary:
-    {product_lines}
-    
-    Total Amount: ₹{order.total_amount}
-    Payment Method: {order.payment_method}
-    """
-    
-    msg.attach(MIMEText(body, 'plain'))
+    print(f"🚀 [EMAIL] Starting for {order.order_id}")
 
     try:
-        server = smtplib.SMTP(smtp_server, smtp_port)
+        # Create connection once
+        server = smtplib.SMTP(smtp_server, smtp_port, timeout=15)
         server.starttls()
         server.login(smtp_username, smtp_password)
-        server.send_message(msg)
+
+        # 1. CUSTOMER EMAIL
+        cust_msg = MIMEMultipart()
+        cust_msg['From'] = f"Swaadanna Himalayas <{smtp_username}>"
+        cust_msg['To'] = order.customer_email
+        cust_msg['Subject'] = f"Order Confirmed: {order.order_id} – Swaadanna Himalayas"
+        
+        product_lines = "\n".join([f"• {p.name} (x{p.quantity}) - ₹{p.price * p.quantity}" for p in order.products])
+        order_date = order.timestamp.strftime("%d %b %Y")
+        
+        body = f"""
+Hello {order.customer_name},
+
+Thank you for placing your order with Swaadanna 🌿
+We’re happy to let you know that your order has been successfully placed.
+
+---
+
+### 🧾 Order Details
+
+Order ID: {order.order_id}
+Order Date: {order_date}
+
+Items Ordered:
+{product_lines}
+
+Total Amount: ₹{order.total_amount}
+
+---
+
+### 💬 Payment & Confirmation
+
+Our team will contact you on WhatsApp shortly with payment options.
+Once the payment is verified, your order will be confirmed and processed.
+
+⏱️ *You should receive the WhatsApp message within 1–3 hours.*
+
+---
+
+### 🚚 Delivery Information
+
+Shipping Address:
+{order.address}
+
+Expected Delivery:
+4–7 business days after payment confirmation.
+
+---
+
+### 📞 Need Help?
+
+If you do not receive a WhatsApp message within 3 hours, feel free to contact us:
+
+📞 +91 83060 94431
+📧 swaadanna01@gmail.com
+
+Thank you for choosing Swaadanna.
+We look forward to serving you again!
+
+Warm regards,
+Team Swaadanna
+🌐 www.swaadanna.shop 
+"""
+        cust_msg.attach(MIMEText(body, 'plain'))
+        
+        server.send_message(cust_msg)
+        print(f"✅ [EMAIL] Sent to Customer: {order.customer_email}")
+        update_nocodb_email_status(order.order_id, True)
+
+        # 2. ADMIN EMAIL
+        admin_msg = MIMEMultipart()
+        admin_msg['From'] = f"Swaadanna Alerts <{smtp_username}>"
+        admin_msg['To'] = admin_email
+        admin_msg['Subject'] = f"NEW ORDER: {order.order_id}"
+        admin_body = f"New order from {order.customer_name}.\nTotal: ₹{order.total_amount}\nCheck dashboard."
+        admin_msg.attach(MIMEText(admin_body, 'plain'))
+        
+        server.send_message(admin_msg)
+        print(f"✅ [EMAIL] Sent to Admin: {admin_email}")
+
         server.quit()
-        print(f"Order email sent for {order.order_id}")
+
     except Exception as e:
-        print(f"Failed to send email: {e}")
+        print(f"❌ [EMAIL] CRITICAL FAILURE: {e}")
+        update_nocodb_email_status(order.order_id, False)
+
+
+@api_router.get("/test-email")
+async def test_email_route(email: str = "swaadanna01@gmail.com"):
+    """
+    Triggers a real test email to verify logic in uvicorn environment.
+    """
+    dummy_order = Order(
+        customer_name="Tester",
+        customer_email=email,
+        phone="00000000",
+        address="Test",
+        products=[],
+        total_amount=0,
+        payment_method="test",
+        order_id="TEST-001"
+    )
+    send_order_confirmation_email(dummy_order)
+    return {"status": "triggered", "recipient": email, "check": "your terminal logs"}
 
 from fastapi import BackgroundTasks
 
@@ -387,7 +514,7 @@ async def create_order(input: OrderCreate, background_tasks: BackgroundTasks):
     background_tasks.add_task(save_to_nocodb, order_obj)
     
     # Send email in background using FastAPI BackgroundTasks
-    background_tasks.add_task(send_order_email, order_obj)
+    background_tasks.add_task(send_order_confirmation_email, order_obj)
     
     # Notify admin via WhatsApp
     background_tasks.add_task(notify_admin_of_order, order_obj)
@@ -437,6 +564,9 @@ async def get_order(order_id: str):
             elif pm == 'COD':
                 doc['payment_method'] = 'cod'
                 
+            # Ensure email_sent is a boolean (handle None/null from NocoDB)
+            doc['email_sent'] = bool(doc.get('email_sent'))
+                
             return doc
             
     raise HTTPException(status_code=404, detail="Order not found")
@@ -464,11 +594,17 @@ async def debug_whatsapp():
 app.include_router(api_router)
 
 # Configure CORS
-origins = os.environ.get('CORS_ORIGINS', '*').split(',')
+raw_origins = os.environ.get('CORS_ORIGINS', '*')
+if raw_origins == '*':
+    origins = ['*']
+else:
+    origins = [o.strip() for o in raw_origins.split(',') if o.strip()]
+
+print(f"📡 CORS: Allowing origins: {origins}")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_credentials=(origins != ['*']), # Disable credentials if allowing all origins to avoid browser errors
+    allow_credentials=(origins != ['*']), 
     allow_origins=origins,
     allow_methods=["*"],
     allow_headers=["*"],
