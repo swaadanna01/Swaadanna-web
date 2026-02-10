@@ -290,7 +290,9 @@ def send_twilio_whatsapp(to_number: str, body: str = None, content_sid: str = No
         print(f"WhatsApp message sent: {message.sid}")
         return message.sid
     except Exception as e:
-        print(f"Failed to send WhatsApp message: {e}")
+        error_msg = f"CRITICAL: Failed to send WhatsApp message: {str(e)}"
+        print(error_msg)
+        logger.error(error_msg)
         return None
 
 def notify_admin_of_order(order: Order):
@@ -315,7 +317,12 @@ def notify_admin_of_order(order: Order):
         f"*Payment Method:* {order.payment_method}"
     )
     
-    send_twilio_whatsapp(admin_phone, body=message_body)
+    print(f"DEBUG: Attempting to notify admin {admin_phone} for Order {order.order_id}")
+    sid = send_twilio_whatsapp(admin_phone, body=message_body)
+    if sid:
+        print(f"DEBUG: WhatsApp SID generated: {sid}")
+    else:
+        print(f"DEBUG: WhatsApp failed for Order {order.order_id}")
 
 
 
@@ -433,6 +440,25 @@ async def get_order(order_id: str):
             return doc
             
     raise HTTPException(status_code=404, detail="Order not found")
+
+@api_router.get("/debug/whatsapp")
+async def debug_whatsapp():
+    """
+    Manually triggers a test WhatsApp message to the admin.
+    """
+    admin_phone = os.environ.get("ADMIN_WHATSAPP_NUMBER")
+    if not admin_phone:
+        return {"status": "error", "message": "ADMIN_WHATSAPP_NUMBER not set in .env"}
+    
+    sid = send_twilio_whatsapp(
+        admin_phone, 
+        body=f"🧪 *Swaadanna Debug Message*\nTriggered at {datetime.now().strftime('%H:%M:%S')}.\nIf you see this, the server can communicate with Twilio!"
+    )
+    
+    if sid:
+        return {"status": "success", "message": f"Message sent! SID: {sid}", "to": admin_phone}
+    else:
+        return {"status": "error", "message": "Failed to send message. Check server logs."}
 
 # Include the router in the main app
 app.include_router(api_router)
