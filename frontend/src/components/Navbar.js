@@ -22,7 +22,7 @@ export const Navbar = () => {
   const isActive = (path) => location.pathname === path;
 
   return (
-    <nav className="sticky top-0 z-50 bg-background/95 backdrop-blur-md border-b border-border">
+    <nav className="sticky top-0 z-50 bg-background border-b border-border">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
@@ -30,7 +30,7 @@ export const Navbar = () => {
             <img
               src={LOGO_URL}
               alt="Swaadanna Logo"
-              className="h-14 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+              className="h-20 w-auto object-contain transition-transform duration-300 group-hover:scale-105 mix-blend-multiply"
             />
           </Link>
 
@@ -55,8 +55,8 @@ export const Navbar = () => {
             ))}
           </div>
 
-          {/* Shop Now Button - Desktop */}
-          <div className="hidden md:flex items-center gap-4">
+          {/* Desktop Actions */}
+          <div className="hidden md:flex items-center gap-6">
             <Link to="/products">
               <Button
                 className="bg-primary hover:bg-primary/90 text-primary-foreground font-sans font-medium px-6 py-2 rounded-full transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5"
@@ -64,10 +64,7 @@ export const Navbar = () => {
                 Shop Now
               </Button>
             </Link>
-          </div>
 
-          {/* Cart Icon - Desktop */}
-          <div className="hidden md:flex items-center ml-4">
             <Link to="/cart" className="relative group">
               <Button variant="ghost" size="icon" className="text-foreground hover:text-primary transition-colors">
                 <i className="fa-solid fa-cart-shopping text-xl"></i>
@@ -90,7 +87,7 @@ export const Navbar = () => {
             <SheetContent side="right" className="bg-background border-l border-border w-[280px]">
               <div className="flex flex-col gap-6 mt-8">
                 <Link to="/" onClick={() => setIsOpen(false)} className="flex items-center gap-3">
-                  <img src={LOGO_URL} alt="Swaadanna Logo" className="h-12 w-auto object-contain" />
+                  <img src={LOGO_URL} alt="Swaadanna Logo" className="h-16 w-auto object-contain mix-blend-multiply" />
                 </Link>
 
                 <div className="flex flex-col gap-4 mt-4">

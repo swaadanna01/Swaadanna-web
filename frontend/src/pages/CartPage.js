@@ -86,17 +86,21 @@ export const CartPage = () => {
                                 <h2 className="font-serif text-xl font-bold mb-4">Order Summary</h2>
 
                                 <div className="space-y-3 mb-6">
-                                    <div className="flex justify-between text-muted-foreground">
+                                    <div className="flex justify-between text-muted-foreground text-sm">
                                         <span>Subtotal</span>
                                         <span>₹{getCartTotal()}</span>
                                     </div>
-                                    <div className="flex justify-between text-muted-foreground">
+                                    <div className="flex justify-between text-muted-foreground text-sm">
                                         <span>Shipping</span>
-                                        <span>Free</span>
+                                        <span>₹100</span>
+                                    </div>
+                                    <div className="flex justify-between text-muted-foreground text-sm">
+                                        <span>GST (18%)</span>
+                                        <span>₹{Math.round((getCartTotal() + 100) * 0.18)}</span>
                                     </div>
                                     <div className="border-t pt-3 flex justify-between font-bold text-lg">
                                         <span>Total</span>
-                                        <span>₹{getCartTotal()}</span>
+                                        <span>₹{getCartTotal() + 100 + Math.round((getCartTotal() + 100) * 0.18)}</span>
                                     </div>
                                 </div>
 

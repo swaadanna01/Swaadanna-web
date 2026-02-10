@@ -78,193 +78,178 @@
 
 /* Dashboard Styles */
 .admin-dashboard-container {
-  padding: 2rem;
-  min-height: 100vh;
-  background: #f7fafc;
   font-family: 'Inter', sans-serif;
 }
 
-.dashboard-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 2rem;
-}
-
 .dashboard-header h1 {
-  margin: 0;
   color: #1a202c;
-}
-
-.logout-button {
-  padding: 0.5rem 1rem;
-  background: #edf2f7;
-  color: #4a5568;
-  border: none;
-  border-radius: 0.375rem;
-  cursor: pointer;
-}
-
-.filters-bar {
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 2rem;
-  background: white;
-  padding: 1rem;
-  border-radius: 0.75rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-.filter-group {
-  display: flex;
-  flex-direction: column;
-}
-
-.filter-group label {
-  font-size: 0.75rem;
-  color: #718096;
-  margin-bottom: 0.25rem;
-}
-
-.filter-group select,
-.filter-group input {
-  padding: 0.5rem;
-  border: 1px solid #e2e8f0;
-  border-radius: 0.375rem;
-}
-
-.orders-table-container {
-  background: white;
-  border-radius: 0.75rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  overflow-x: auto;
-}
-
-.orders-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.orders-table th,
-.orders-table td {
-  padding: 1rem;
-  text-align: left;
-  border-bottom: 1px solid #edf2f7;
+  letter-spacing: -0.025em;
 }
 
 .orders-table th {
-  background: #f8fafc;
-  color: #718096;
-  font-weight: 600;
-  font-size: 0.875rem;
-  text-transform: uppercase;
-  letter-spacing: 0.025em;
+  padding: 1rem;
+  font-weight: 700;
+  color: #64748b;
+  border-bottom: 2px solid #f1f5f9;
+}
+
+.orders-table td {
+  padding: 1rem;
+  vertical-align: middle;
 }
 
 .status-badge {
-  padding: 0.25rem 0.75rem;
-  border-radius: 9999px;
-  font-size: 0.75rem;
-  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 10px !important;
+  font-weight: 800 !important;
+  padding: 4px 10px !important;
 }
 
 .status-pending {
-  background: #feebc8;
-  color: #9c4221;
+  background-color: #fef3c7 !important;
+  color: #92400e !important;
 }
 
 .status-accept {
-  background: #c6f6d5;
-  color: #22543d;
+  background-color: #dcfce7 !important;
+  color: #166534 !important;
 }
 
 .status-reject {
-  background: #fed7d7;
-  color: #822727;
+  background-color: #fee2e2 !important;
+  color: #991b1b !important;
 }
 
-.action-select {
-  padding: 0.25rem;
-  border: 1px solid #e2e8f0;
-  border-radius: 0.375rem;
-  font-size: 0.875rem;
-  margin-right: 0.5rem;
-}
-
-.update-button {
-  padding: 0.25rem 0.75rem;
-  background: #3182ce;
-  color: white;
-  border: none;
-  border-radius: 0.375rem;
-  font-size: 0.75rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.update-button:hover {
-  background: #2b6cb0;
-}
-
-.update-button:disabled {
-  background: #cbd5e0;
-  cursor: not-allowed;
+.status-delivered {
+  background-color: #dbeafe !important;
+  color: #1e40af !important;
 }
 
 .bulk-actions-bar {
-  position: sticky;
-  bottom: 2rem;
-  left: 50%;
-  transform: translateX(-50%);
-  background: #2d3748;
-  color: white;
-  padding: 1rem 2rem;
-  border-radius: 1rem;
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-  z-index: 100;
-  width: max-content;
-}
-
-.bulk-actions-bar span {
-  font-weight: 600;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
 }
 
 .bulk-actions-bar select {
-  padding: 0.5rem;
-  border-radius: 0.375rem;
-  border: none;
-  background: #4a5568;
-  color: white;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='white'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.5rem center;
+  background-size: 1rem;
+  padding-right: 2rem !important;
 }
 
-.bulk-apply-button {
-  padding: 0.5rem 1rem;
-  background: #48bb78;
-  color: white;
-  border: none;
-  border-radius: 0.375rem;
-  font-weight: 600;
+/* Custom transitions for interactive elements */
+.orders-table tr {
   cursor: pointer;
 }
 
-.bulk-apply-button:hover {
-  background: #38a169;
+.orders-table tr:hover .fa-eye {
+  transform: scale(1.1);
 }
 
-.search-input {
-  flex: 1;
-  min-width: 250px;
+.fa-eye {
+  transition: transform 0.2s ease;
 }
 
-/* Checkbox styling */
-input[type="checkbox"] {
-  cursor: pointer;
-  width: 1.2rem;
-  height: 1.2rem;
-  border-radius: 0.25rem;
-  border: 2px solid #cbd5e0;
+/* Modal specific overrides if needed */
+[data-radix-popper-content-wrapper] {
+  z-index: 100 !important;
+}
+
+/* Print Styles for Invoice */
+@media print {
+
+  /* Reset global layout */
+  html,
+  body {
+    height: auto !important;
+    overflow: visible !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: white !important;
+  }
+
+  /* Hide everything except the printable content */
+  body>* {
+    display: none !important;
+  }
+
+  /* Target Radix UI Portal / Dialog Containers */
+  div[data-radix-portal] {
+    display: block !important;
+    position: static !important;
+    visibility: visible !important;
+  }
+
+  /* Reset Dialog Overlay and generic wrapper */
+  [data-state="open"] {
+    visibility: visible !important;
+  }
+
+  /* Target the DialogContent specifically */
+  div[role="dialog"] {
+    display: block !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    max-width: none !important;
+    height: auto !important;
+    max-height: none !important;
+    transform: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    visibility: visible !important;
+    overflow: visible !important;
+    background: white !important;
+  }
+
+  /* Ensure the invoice-only content is shown correctly */
+  .invoice-only {
+    display: block !important;
+    visibility: visible !important;
+    padding: 2rem !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .invoice-only * {
+    visibility: visible !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    border-color: #ddd !important;
+    color: black !important;
+    line-height: normal !important;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  @page {
+    margin: 1.5cm;
+    size: A4;
+  }
+
+  .invoice-header {
+    border-bottom: 2px solid #000 !important;
+    padding-bottom: 1.5rem !important;
+    margin-bottom: 2rem !important;
+  }
+
+  .invoice-table th,
+  .invoice-table td {
+    padding: 1rem 0.5rem !important;
+    border-bottom: 1px solid #eee !important;
+    color: black !important;
+  }
+}
+
+.invoice-only {
+  display: none;
 }

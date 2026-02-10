@@ -14,14 +14,14 @@ export const HomePage = () => {
       <section className="relative min-h-[90vh] flex items-center overflow-hidden">
         {/* Background Image with Overlay */}
         <div className="absolute inset-0">
-          <img 
-            src={HERO_BG} 
-            alt="Himalayan Mountains" 
+          <img
+            src={HERO_BG}
+            alt="Himalayan Mountains"
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-foreground/80 via-foreground/50 to-transparent" />
         </div>
-        
+
         {/* Content */}
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
           <div className="max-w-2xl">
@@ -29,17 +29,17 @@ export const HomePage = () => {
               <i className="fa-solid fa-mountain text-sm"></i>
               <span className="font-sans text-sm font-medium">From the Heart of Himalayas</span>
             </div>
-            
+
             <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold text-primary-foreground leading-tight mb-6 animate-fade-in" style={{ animationDelay: '100ms' }}>
               Authentic Pahadi <br />
               <span className="text-secondary">Pickles & Honey</span>
             </h1>
-            
+
             <p className="font-sans text-lg text-primary-foreground/90 mb-8 leading-relaxed max-w-lg animate-fade-in" style={{ animationDelay: '200ms' }}>
-              Taste the tradition of the Himalayas with our handcrafted pickles and pure honey. 
+              Taste the tradition of the Himalayas with our handcrafted pickles and pure honey.
               Made with love, no preservatives, and generations of authentic recipes.
             </p>
-            
+
             <div className="flex flex-wrap gap-4 animate-fade-in" style={{ animationDelay: '300ms' }}>
               <Link to="/products">
                 <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-sans font-semibold px-8 py-6 text-base rounded-full transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
@@ -81,19 +81,18 @@ export const HomePage = () => {
       {/* Value Proposition */}
       <section className="py-16 bg-muted/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
             {[
-              { icon: 'fa-solid fa-truck', label: 'Pan India Delivery', value: 'Free above ₹500' },
-              { icon: 'fa-solid fa-shield-check', label: 'Quality Assured', value: '100% Authentic' },
+              { icon: 'fa-solid fa-truck', label: 'Pan India Delivery', value: 'Flat rate ₹100' },
+              { icon: 'fa-solid fa-shield-halved', label: 'Quality Assured', value: '100% Authentic' },
               { icon: 'fa-solid fa-box-open', label: 'Fresh Products', value: 'Made to Order' },
-              { icon: 'fa-solid fa-headset', label: 'Support', value: '24/7 Available' },
             ].map((item, index) => (
               <div key={index} className="flex flex-col items-center text-center p-4">
-                <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center mb-3">
-                  <i className={`${item.icon} text-primary text-xl`}></i>
+                <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+                  <i className={`${item.icon} text-primary text-2xl`}></i>
                 </div>
-                <h4 className="font-sans font-semibold text-foreground text-sm mb-1">{item.label}</h4>
-                <p className="font-sans text-xs text-muted-foreground">{item.value}</p>
+                <h4 className="font-serif text-lg font-bold text-foreground mb-1">{item.label}</h4>
+                <p className="font-sans text-sm text-muted-foreground">{item.value}</p>
               </div>
             ))}
           </div>
@@ -139,9 +138,9 @@ export const HomePage = () => {
             {/* Image */}
             <div className="relative">
               <div className="relative rounded-2xl overflow-hidden shadow-hover">
-                <img 
-                  src={SPICES_IMG} 
-                  alt="Traditional Indian Spices" 
+                <img
+                  src={SPICES_IMG}
+                  alt="Traditional Indian Spices"
                   className="w-full h-[400px] object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-foreground/40 to-transparent" />
@@ -168,8 +167,8 @@ export const HomePage = () => {
                 <span className="text-primary">From the Hills</span>
               </h2>
               <p className="font-sans text-muted-foreground mb-6 leading-relaxed">
-                Swaadanna was born from a passion to preserve the authentic flavors of the Himalayas. 
-                Our pickles and honey are made using recipes that have been passed down through generations, 
+                Swaadanna was born from a passion to preserve the authentic flavors of the Himalayas.
+                Our pickles and honey are made using recipes that have been passed down through generations,
                 using only the freshest ingredients sourced directly from local farmers.
               </p>
               <ul className="space-y-4 mb-8">
@@ -278,7 +277,7 @@ export const HomePage = () => {
             Ready to Taste the Himalayas?
           </h2>
           <p className="font-sans text-lg text-primary-foreground/80 mb-8 max-w-2xl mx-auto">
-            Order now and experience the authentic flavors of Pahadi pickles and honey, 
+            Order now and experience the authentic flavors of Pahadi pickles and honey,
             delivered straight to your doorstep.
           </p>
           <Link to="/products">

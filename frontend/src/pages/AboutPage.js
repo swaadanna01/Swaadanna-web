@@ -88,7 +88,7 @@ export const AboutPage = () => {
               </div>
               {/* Logo Overlay */}
               <div className="absolute -bottom-8 -left-8 bg-card p-6 rounded-2xl shadow-card hidden md:block">
-                <img src={LOGO_URL} alt="Swaadanna Logo" className="h-24 w-auto object-contain" />
+                <img src={LOGO_URL} alt="Swaadanna Logo" className="h-24 w-auto object-contain mix-blend-multiply" />
               </div>
             </div>
           </div>

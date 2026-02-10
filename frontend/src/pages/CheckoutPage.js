@@ -24,10 +24,18 @@ export const CheckoutPage = () => {
         paymentMethod: 'upi'
     });
 
+    const [isOrderPlaced, setIsOrderPlaced] = useState(false);
+
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
     };
+
+    const subtotal = getCartTotal();
+    const shipping = 100;
+    const gstRate = 0.18;
+    const gstAmount = Math.round((subtotal + shipping) * gstRate);
+    const totalAmount = subtotal + shipping + gstAmount;
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -49,15 +57,13 @@ export const CheckoutPage = () => {
                     product_id: item.id,
                     name: item.name,
                     quantity: item.quantity,
-                    price: item.price
+                    price: item.price,
+                    image: item.image
                 })),
-                total_amount: getCartTotal(),
-                payment_method: formData.paymentMethod
+                total_amount: totalAmount,
+                payment_method: 'upi' // Defaulting to UPI as requested to remove option
             };
 
-            // API URL - Using production domain
-            // const isLocal = window.location.hostname === 'localhost';
-            // const API_URL = process.env.REACT_APP_API_URL || (isLocal ? 'http://localhost:8000/api' : 'https://swaadanna.shop/api');
             const API_URL = process.env.REACT_APP_API_URL || 'https://www.swaadanna.shop/api';
 
             const response = await axios.post(`${API_URL}/orders`, orderData);
@@ -73,8 +79,11 @@ export const CheckoutPage = () => {
                 `Phone: ${savedOrder.phone}\n` +
                 `Address: ${savedOrder.address}\n\n` +
                 `*Order Summary:*\n${productsList}\n\n` +
-                `*Total Amount:* ₹${savedOrder.total_amount}\n` +
-                `*Payment Method:* ${savedOrder.payment_method}`;
+                `*Subtotal:* ₹${subtotal}\n` +
+                `*Shipping:* ₹${shipping}\n` +
+                `*GST (18%):* ₹${gstAmount}\n` +
+                `*Total Amount:* ₹${totalAmount}\n` +
+                `*Payment Method:* UPI (Pending Achievement)`;
 
             const encodedMessage = encodeURIComponent(message);
             const whatsappUrl = `https://wa.me/${adminPhone}?text=${encodedMessage}`;
@@ -84,7 +93,8 @@ export const CheckoutPage = () => {
                 duration: 3000,
             });
 
-            // Navigate directly to success page without manual WhatsApp redirect
+            setIsOrderPlaced(true);
+
             setTimeout(() => {
                 clearCart();
                 navigate(`/order-success/${savedOrder.order_id}`);
@@ -99,10 +109,10 @@ export const CheckoutPage = () => {
     };
 
     useEffect(() => {
-        if (cart.length === 0) {
+        if (!isOrderPlaced && cart.length === 0) {
             navigate('/products');
         }
-    }, [cart, navigate]);
+    }, [cart, navigate, isOrderPlaced]);
 
     if (cart.length === 0) {
         return null;
@@ -117,7 +127,7 @@ export const CheckoutPage = () => {
                     {/* Contact Details */}
                     <Card>
                         <CardHeader>
-                            <CardTitle>Contact Information</CardTitle>
+                            <CardTitle className="text-sm font-bold uppercase tracking-wider">Contact Information</CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-4">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -160,7 +170,7 @@ export const CheckoutPage = () => {
                     {/* Shipping Address */}
                     <Card>
                         <CardHeader>
-                            <CardTitle>Shipping Address</CardTitle>
+                            <CardTitle className="text-sm font-bold uppercase tracking-wider">Shipping Address</CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-4">
                             <div className="space-y-2">
@@ -198,77 +208,52 @@ export const CheckoutPage = () => {
                         </CardContent>
                     </Card>
 
-                    {/* Payment Method */}
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>Payment Method</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            <RadioGroup
-                                defaultValue="upi"
-                                onValueChange={(value) => setFormData(prev => ({ ...prev, paymentMethod: value }))}
-                                className="space-y-4"
-                            >
-                                <div className="flex items-center space-x-2 border p-4 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
-                                    <RadioGroupItem value="upi" id="upi" />
-                                    <Label htmlFor="upi" className="flex-1 cursor-pointer">
-                                        <span className="font-semibold block">UPI / QR Code</span>
-                                        <span className="text-sm text-muted-foreground">Pay using GPay, PhonePe, Paytm</span>
-                                    </Label>
-                                    <i className="fa-solid fa-qrcode text-xl text-muted-foreground"></i>
-                                </div>
-                                <div className="flex items-center space-x-2 border p-4 rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
-                                    <RadioGroupItem value="cod" id="cod" />
-                                    <Label htmlFor="cod" className="flex-1 cursor-pointer">
-                                        <span className="font-semibold block">Cash on Delivery</span>
-                                        <span className="text-sm text-muted-foreground">Pay when you receive your order</span>
-                                    </Label>
-                                    <i className="fa-solid fa-money-bill-wave text-xl text-muted-foreground"></i>
-                                </div>
-                            </RadioGroup>
+                    {/* Order Summary Footer */}
+                    <Card className="border-none shadow-none bg-muted/30 p-6 rounded-xl">
+                        <CardContent className="p-0 space-y-4">
+                            <div className="flex justify-between items-center text-sm">
+                                <span className="text-muted-foreground">Subtotal</span>
+                                <span>₹{subtotal}</span>
+                            </div>
+                            <div className="flex justify-between items-center text-sm">
+                                <span className="text-muted-foreground">Shipping</span>
+                                <span>₹{shipping}</span>
+                            </div>
+                            <div className="flex justify-between items-center text-sm">
+                                <span className="text-muted-foreground">GST (18%)</span>
+                                <span>₹{gstAmount}</span>
+                            </div>
+                            <div className="flex justify-between items-center text-lg font-bold border-t pt-4 mt-4">
+                                <span>Total Amount</span>
+                                <span>₹{totalAmount}</span>
+                            </div>
 
-                            {formData.paymentMethod === 'upi' && (
-                                <div className="mt-4 p-4 border rounded-lg bg-gray-50 flex flex-col items-center animate-in fade-in slide-in-from-top-2 duration-300">
-                                    <p className="font-medium mb-2">Scan QR to Pay</p>
-                                    <div className="bg-white p-2 rounded shadow-sm">
-                                        <img
-                                            src="/payment-qr.jpg"
-                                            alt="Payment QR Code"
-                                            className="w-48 h-48 object-contain"
-                                        />
-                                    </div>
-                                    <p className="text-xs text-muted-foreground mt-2">
-                                        Scan using GPay, PhonePe, or any UPI app
-                                    </p>
+                            <div className="pt-2">
+                                <div className="flex items-center gap-2 text-primary font-medium text-sm">
+                                    <i className="fa-solid fa-truck-fast"></i>
+                                    <span>Expected delivery: 4-7 business days</span>
                                 </div>
-                            )}
+                            </div>
+
+                            <Button
+                                type="submit"
+                                className="w-full h-12 text-lg font-sans bg-primary hover:bg-primary/90 mt-4"
+                                disabled={isSubmitting}
+                            >
+                                {isSubmitting ? (
+                                    <>
+                                        <i className="fa-solid fa-spinner fa-spin mr-2"></i>
+                                        Processing...
+                                    </>
+                                ) : (
+                                    'Place Order'
+                                )}
+                            </Button>
+                            <p className="text-xs text-center text-muted-foreground border-t pt-4">
+                                By placing this order, you agree to our Terms of Service and Privacy Policy. Direct UPI payment information will be provided after confirmation.
+                            </p>
                         </CardContent>
                     </Card>
-
-                    {/* Order Summary Footer */}
-                    <div className="bg-muted/30 p-6 rounded-xl space-y-4">
-                        <div className="flex justify-between items-center text-lg font-bold">
-                            <span>Total Amount</span>
-                            <span>₹{getCartTotal()}</span>
-                        </div>
-                        <Button
-                            type="submit"
-                            className="w-full h-12 text-lg font-sans bg-primary hover:bg-primary/90"
-                            disabled={isSubmitting}
-                        >
-                            {isSubmitting ? (
-                                <>
-                                    <i className="fa-solid fa-spinner fa-spin mr-2"></i>
-                                    Processing...
-                                </>
-                            ) : (
-                                'Place Order'
-                            )}
-                        </Button>
-                        <p className="text-xs text-center text-muted-foreground">
-                            By placing this order, you agree to our Terms of Service and Privacy Policy.
-                        </p>
-                    </div>
                 </form>
             </div>
         </div>

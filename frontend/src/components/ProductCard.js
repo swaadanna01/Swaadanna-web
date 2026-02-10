@@ -51,12 +51,12 @@ export const ProductCard = ({ product, index = 0 }) => {
 
       <CardContent className="p-5 flex flex-col">
         {/* Product Name */}
-        <h3 className="font-serif text-lg font-semibold text-foreground mb-2 line-clamp-1 group-hover:text-primary transition-colors duration-300">
+        <h3 className="font-serif text-lg font-semibold text-foreground mb-2 group-hover:text-primary transition-colors duration-300">
           {product.name}
         </h3>
 
         {/* Description */}
-        <p className="font-sans text-sm text-muted-foreground mb-4 line-clamp-2 leading-relaxed">
+        <p className="font-sans text-sm text-muted-foreground mb-4 leading-relaxed">
           {product.description}
         </p>
 

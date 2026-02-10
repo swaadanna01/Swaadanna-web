@@ -11,14 +11,10 @@ export const Footer = () => {
     { name: 'Products', path: '/products' },
     { name: 'About Us', path: '/about' },
     { name: 'Contact', path: '/contact' },
-    { name: 'Payment', path: '/payment' },
   ];
 
   const socialLinks = [
-    { icon: 'fa-brands fa-instagram', href: '#', label: 'Instagram' },
-    { icon: 'fa-brands fa-facebook-f', href: '#', label: 'Facebook' },
     { icon: 'fa-brands fa-whatsapp', href: 'https://wa.me/918306094431', label: 'WhatsApp' },
-    { icon: 'fa-brands fa-youtube', href: '#', label: 'YouTube' },
   ];
 
   return (
@@ -32,7 +28,12 @@ export const Footer = () => {
               <img
                 src={LOGO_URL}
                 alt="Swaadanna Logo"
-                className="h-20 w-auto object-contain"
+                className="h-32 w-auto object-contain"
+                style={{
+                  maskImage: 'radial-gradient(circle, black 65%, transparent 100%)',
+                  WebkitMaskImage: 'radial-gradient(circle, black 65%, transparent 100%)',
+                  filter: 'brightness(1.1) contrast(1.1)'
+                }}
               />
             </Link>
             <p className="text-primary-foreground/80 font-sans text-sm leading-relaxed max-w-md mb-6">

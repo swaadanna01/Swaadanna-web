@@ -20,9 +20,9 @@ import ErrorBoundary from "@/components/ErrorBoundary";
 function App() {
   return (
     <div className="App min-h-screen bg-background">
-      <ErrorBoundary>
-        <CartProvider>
-          <HashRouter>
+      <CartProvider>
+        <HashRouter>
+          <ErrorBoundary>
             <Navbar />
             <main>
               <Routes>
@@ -40,10 +40,10 @@ function App() {
               </Routes>
             </main>
             <Footer />
-            <Toaster position="top-right" richColors />
-          </HashRouter>
-        </CartProvider>
-      </ErrorBoundary>
+            <Toaster position="top-right" richColors closeButton />
+          </ErrorBoundary>
+        </HashRouter>
+      </CartProvider>
     </div>
   );
 }

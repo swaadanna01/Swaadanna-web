@@ -88,7 +88,7 @@ export const ContactPage = () => {
               Contact Us
             </h1>
             <p className="font-sans text-lg text-muted-foreground max-w-2xl mx-auto">
-              Have questions about our products or want to place a bulk order? 
+              Have questions about our products or want to place a bulk order?
               We&apos;d love to hear from you!
             </p>
           </div>
@@ -135,7 +135,17 @@ export const ContactPage = () => {
                 Fill out the form below and we&apos;ll get back to you as soon as possible.
               </p>
 
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <form
+                action="https://formsubmit.co/swaadannaorganics01@gmail.com"
+                method="POST"
+                className="space-y-6"
+              >
+                {/* FormSubmit Configuration */}
+                <input type="hidden" name="_next" value={window.location.origin + window.location.pathname + "#/contact"} />
+                <input type="hidden" name="_captcha" value="false" />
+                <input type="hidden" name="_subject" value={`New Swaadanna Contact Message: ${formData.subject}`} />
+                <input type="hidden" name="_template" value="table" />
+
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <Label htmlFor="name" className="font-sans text-sm font-medium text-foreground">
@@ -219,20 +229,10 @@ export const ContactPage = () => {
 
                 <Button
                   type="submit"
-                  disabled={isSubmitting}
-                  className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-primary-foreground font-sans font-semibold px-10 py-6 text-base rounded-full transition-all duration-300 hover:shadow-lg disabled:opacity-70"
+                  className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-primary-foreground font-sans font-semibold px-10 py-6 text-base rounded-full transition-all duration-300 hover:shadow-lg"
                 >
-                  {isSubmitting ? (
-                    <>
-                      <i className="fa-solid fa-spinner fa-spin mr-2"></i>
-                      Sending...
-                    </>
-                  ) : (
-                    <>
-                      <i className="fa-solid fa-paper-plane mr-2"></i>
-                      Send Message
-                    </>
-                  )}
+                  <i className="fa-solid fa-paper-plane mr-2"></i>
+                  Send Message
                 </Button>
               </form>
             </div>
@@ -244,17 +244,13 @@ export const ContactPage = () => {
                   Quick Response
                 </h3>
                 <p className="font-sans text-muted-foreground mb-6 leading-relaxed">
-                  We typically respond within 24 hours. For urgent queries, please call us directly 
+                  We typically respond within 24 hours. For urgent queries, please call us directly
                   or reach out via WhatsApp for faster assistance.
                 </p>
                 <div className="space-y-4">
                   <div className="flex items-center gap-3">
                     <i className="fa-solid fa-clock text-primary"></i>
                     <span className="font-sans text-foreground">Response time: 24 hours</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <i className="fa-solid fa-headset text-primary"></i>
-                    <span className="font-sans text-foreground">Support: Mon-Sat, 9am-7pm</span>
                   </div>
                 </div>
               </div>
@@ -289,19 +285,13 @@ export const ContactPage = () => {
             Ready to Order?
           </h2>
           <p className="font-sans text-muted-foreground mb-8">
-            Visit our products page or head to the payment page to complete your order.
+            Visit our products page to complete your order.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <a href="/products">
               <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-sans font-medium px-8 py-3 rounded-full transition-all duration-300">
                 <i className="fa-solid fa-shopping-bag mr-2"></i>
                 View Products
-              </Button>
-            </a>
-            <a href="/payment">
-              <Button variant="outline" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground font-sans font-medium px-8 py-3 rounded-full transition-all duration-300">
-                <i className="fa-solid fa-credit-card mr-2"></i>
-                Payment Options
               </Button>
             </a>
           </div>
