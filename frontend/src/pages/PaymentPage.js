@@ -67,8 +67,8 @@ export const PaymentPage = () => {
               {/* Payment Method Cards */}
               <div className="space-y-4 mb-10">
                 {paymentMethods.map((method, index) => (
-                  <Card 
-                    key={index} 
+                  <Card
+                    key={index}
                     className={`bg-card border-2 rounded-2xl transition-all duration-300 cursor-pointer hover:shadow-card
                       ${method.recommended ? 'border-primary' : 'border-border/50 hover:border-primary/50'}`}
                   >
@@ -106,7 +106,7 @@ export const PaymentPage = () => {
                     <p className="font-sans text-sm text-muted-foreground mb-6">
                       Use any UPI app to scan and pay
                     </p>
-                    
+
                     {/* QR Code Placeholder */}
                     <div className="w-56 h-56 mx-auto bg-muted rounded-2xl flex items-center justify-center mb-6 border-2 border-dashed border-border">
                       <div className="text-center">
@@ -137,7 +137,7 @@ export const PaymentPage = () => {
               <h2 className="font-serif text-2xl sm:text-3xl font-bold text-foreground mb-6">
                 Order Summary
               </h2>
-              
+
               <Card className="bg-card border-border/50 rounded-2xl overflow-hidden mb-8">
                 <CardContent className="p-6">
                   {/* Sample Items */}
@@ -145,9 +145,9 @@ export const PaymentPage = () => {
                     {products.map((product) => (
                       <div key={product.id} className="flex items-center gap-4">
                         <div className="w-16 h-16 rounded-lg overflow-hidden bg-muted flex-shrink-0">
-                          <img 
-                            src={product.image} 
-                            alt={product.name} 
+                          <img
+                            src={product.image}
+                            alt={product.name}
                             className="w-full h-full object-cover"
                           />
                         </div>
@@ -202,7 +202,7 @@ export const PaymentPage = () => {
                     </li>
                     <li className="flex gap-3">
                       <span className="w-6 h-6 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-xs flex-shrink-0">3</span>
-                      <span>After payment, share the screenshot on WhatsApp: <a href="https://wa.me/918306094431" className="text-primary hover:underline">+91 83060 94431</a></span>
+                      <span>After payment, share the screenshot on WhatsApp: <a href="https://wa.me/916239560292" className="text-primary hover:underline">+91 62395 60292</a></span>
                     </li>
                     <li className="flex gap-3">
                       <span className="w-6 h-6 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-xs flex-shrink-0">4</span>
@@ -218,13 +218,13 @@ export const PaymentPage = () => {
                   Need help with your payment?
                 </p>
                 <div className="flex flex-wrap justify-center gap-4">
-                  <a href="https://wa.me/918306094431" target="_blank" rel="noopener noreferrer">
+                  <a href="https://wa.me/916239560292" target="_blank" rel="noopener noreferrer">
                     <Button className="bg-accent hover:bg-accent/90 text-accent-foreground font-sans font-medium px-6 py-3 rounded-full transition-all duration-300">
                       <i className="fa-brands fa-whatsapp mr-2"></i>
                       WhatsApp Us
                     </Button>
                   </a>
-                  <a href="tel:+918306094431">
+                  <a href="tel:+916239560292">
                     <Button variant="outline" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground font-sans font-medium px-6 py-3 rounded-full transition-all duration-300">
                       <i className="fa-solid fa-phone mr-2"></i>
                       Call Us

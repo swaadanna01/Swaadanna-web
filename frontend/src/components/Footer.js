@@ -14,7 +14,7 @@ export const Footer = () => {
   ];
 
   const socialLinks = [
-    { icon: 'fa-brands fa-whatsapp', href: 'https://wa.me/918306094431', label: 'WhatsApp' },
+    { icon: 'fa-brands fa-whatsapp', href: 'https://wa.me/916239560292', label: 'WhatsApp' },
   ];
 
   return (
@@ -99,10 +99,10 @@ export const Footer = () => {
                 <div>
                   <p className="text-primary-foreground/60 text-xs font-sans mb-1">Phone</p>
                   <a
-                    href="tel:+918306094431"
+                    href="tel:+916239560292"
                     className="text-primary-foreground/90 hover:text-secondary font-sans text-sm transition-colors duration-200"
                   >
-                    +91 83060 94431
+                    +91 62395 60292
                   </a>
                 </div>
               </li>

@@ -133,7 +133,7 @@ const OrderDetailsModal = ({ order, isOpen, onClose, formatDate }) => {
                                 <p>Swaadanna Organics & Naturals</p>
                                 <p>Himachal Pradesh, India</p>
                                 <p>Email: swaadannaorganics01@gmail.com</p>
-                                <p>Phone: +91 83060 94431</p>
+                                <p>Phone: +91 62395 60292</p>
                             </div>
                         </div>
                         <div className="text-right">

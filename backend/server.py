@@ -10,6 +10,7 @@ import uuid
 from datetime import datetime, timezone
 import requests
 from twilio.rest import Client
+import json
 
 
 ROOT_DIR = Path(__file__).parent
@@ -278,7 +279,8 @@ async def bulk_update_status(update_data: dict):
         "results": results
     }
 
-def send_twilio_whatsapp(to_number: str, body: str = None, content_sid: str = None, content_variables: str = None):
+
+def send_twilio_whatsapp(to_number: str, body: str = None, content_sid: str = None, content_variables: any = None):
     """
     Sends a WhatsApp message using Twilio.
     """
@@ -301,7 +303,11 @@ def send_twilio_whatsapp(to_number: str, body: str = None, content_sid: str = No
         if content_sid:
             params["content_sid"] = content_sid
             if content_variables:
-                params["content_variables"] = content_variables
+                # Twilio Python SDK expects a JSON string for content_variables
+                if isinstance(content_variables, (dict, list)):
+                    params["content_variables"] = json.dumps(content_variables)
+                else:
+                    params["content_variables"] = content_variables
         else:
             params["body"] = body
 
@@ -316,7 +322,7 @@ def send_twilio_whatsapp(to_number: str, body: str = None, content_sid: str = No
 
 def notify_admin_of_order(order: Order):
     """
-    Formates and sends a WhatsApp notification to the admin.
+    Formats and sends a WhatsApp notification to the admin.
     """
     admin_phone = os.environ.get("ADMIN_WHATSAPP_NUMBER")
     if not admin_phone:
@@ -337,6 +343,7 @@ def notify_admin_of_order(order: Order):
     
     print(f"DEBUG: Attempting to notify admin {admin_phone} for Order {order.order_id}")
     sid = send_twilio_whatsapp(admin_phone, body=message_body)
+    
     if sid:
         print(f"DEBUG: WhatsApp SID generated: {sid}")
     else:
@@ -414,9 +421,7 @@ Hello {order.customer_name},
 Thank you for placing your order with Swaadanna 🌿
 We’re happy to let you know that your order has been successfully placed.
 
----
-
-### 🧾 Order Details
+🧾 Order Details
 
 Order ID: {order.order_id}
 Order Date: {order_date}
@@ -426,18 +431,15 @@ Items Ordered:
 
 Total Amount: ₹{order.total_amount}
 
----
 
-### 💬 Payment & Confirmation
+💬 Payment & Confirmation
 
 Our team will contact you on WhatsApp shortly with payment options.
 Once the payment is verified, your order will be confirmed and processed.
 
-⏱️ *You should receive the WhatsApp message within 1–3 hours.*
+⏱️ You should receive the WhatsApp message within 1–3 hours.
 
----
-
-### 🚚 Delivery Information
+🚚 Delivery Information
 
 Shipping Address:
 {order.address}
@@ -445,13 +447,11 @@ Shipping Address:
 Expected Delivery:
 4–7 business days after payment confirmation.
 
----
-
-### 📞 Need Help?
+📞 Need Help?
 
 If you do not receive a WhatsApp message within 3 hours, feel free to contact us:
 
-📞 +91 83060 94431
+📞 +91 62395 60292
 📧 swaadanna01@gmail.com
 
 Thank you for choosing Swaadanna.

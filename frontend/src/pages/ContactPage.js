@@ -55,15 +55,15 @@ export const ContactPage = () => {
     {
       icon: 'fa-solid fa-phone',
       title: 'Call Us',
-      value: '+91 83060 94431',
-      link: 'tel:+918306094431',
+      value: '+91 62395 60292',
+      link: 'tel:+916239560292',
       color: 'accent'
     },
     {
       icon: 'fa-brands fa-whatsapp',
       title: 'WhatsApp',
-      value: '+91 83060 94431',
-      link: 'https://wa.me/918306094431',
+      value: '+91 62395 60292',
+      link: 'https://wa.me/916239560292',
       color: 'himalayan-green'
     },
     {

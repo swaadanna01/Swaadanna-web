@@ -166,7 +166,7 @@ export const ProductsPage = () => {
                 <h3 className="font-serif text-xl font-semibold text-foreground mb-2">How to Order</h3>
                 <p className="font-sans text-muted-foreground leading-relaxed">
                   Add your favorite products to the cart, proceed to checkout, and enter your details to place the order. Our team will contact you on WhatsApp with payment options (UPI or Bank Transfer). Your order will be confirmed after payment verification. For bulk orders or queries, contact us at{' '}
-                  <a href="tel:+918306094431" className="text-primary hover:underline">+91 83060 94431</a>
+                  <a href="tel:+916239560292" className="text-primary hover:underline">+91 62395 60292</a>
                 </p>
               </div>
             </div>

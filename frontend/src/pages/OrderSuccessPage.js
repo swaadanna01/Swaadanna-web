@@ -236,7 +236,7 @@ const OrderSuccessPage = () => {
                 <div className="text-center pt-8 border-t border-border">
                     <p className="font-sans text-muted-foreground text-sm">
                         If you do not receive a WhatsApp message within 3 hours, contact us at{' '}
-                        <a href="tel:+918306094431" className="text-primary font-bold hover:underline">+91 83060 94431</a>
+                        <a href="tel:+916239560292" className="text-primary font-bold hover:underline">+91 62395 60292</a>
                     </p>
                     <div className="mt-10">
                         <Link to="/products">

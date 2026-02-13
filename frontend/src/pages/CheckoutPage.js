@@ -73,7 +73,7 @@ export const CheckoutPage = () => {
             console.log('Order saved successfully:', savedOrder);
 
             // Generate WhatsApp message for admin
-            const adminPhone = "919596937000";
+            const adminPhone = "916239560292";
             const productsList = savedOrder.products.map(p => `- ${p.name} (x${p.quantity}): ₹${p.price * p.quantity}`).join('\n');
             const message = `*New Order from Swaadanna!* 🌿\n\n` +
                 `*Order ID:* ${savedOrder.order_id}\n\n` +
