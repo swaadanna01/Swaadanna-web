@@ -37,7 +37,7 @@ export const products = [
     weight: "350g",
     price: 299,
     category: "Pickle",
-    image: "/images/products/garlic pickle.png",
+    image: "/images/products/pahari-garlic-pickle.png",
     features: ["Garlic rich", "Mountain spices", "Traditional"]
   },
   {
