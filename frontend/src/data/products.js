@@ -7,7 +7,7 @@ export const products = [
     weight: "350g",
     price: 299,
     category: "Pickle",
-    image: "https://images.unsplash.com/photo-1617854307432-13950e24ba07?w=600&h=600&fit=crop",
+    image: "/images/products/pahari-galgal-pickle.png",
     features: ["Sun-dried", "No preservatives", "Traditional recipe"]
   },
   {
@@ -15,9 +15,9 @@ export const products = [
     name: "Chukh Pickle",
     description: "Spicy Himalayan chilli pickle made using traditional pahadi recipes. A fiery delight for those who love bold flavors.",
     weight: "350g",
-    price: 279,
+    price: 299,
     category: "Pickle",
-    image: "https://images.unsplash.com/photo-1723155182094-af2f63472d0b?w=600&h=600&fit=crop",
+    image: "/images/products/chukh-pickle.png",
     features: ["Extra spicy", "Authentic taste", "Handmade"]
   },
   {
@@ -27,7 +27,7 @@ export const products = [
     weight: "500g",
     price: 599,
     category: "Honey",
-    image: "https://images.unsplash.com/photo-1558642452-9d2a7deb7f62?w=600&h=600&fit=crop",
+    image: "/images/products/kesar-honey.png",
     features: ["Pure honey", "Kesar infused", "Health benefits"]
   },
   {
@@ -35,11 +35,43 @@ export const products = [
     name: "Pahari Garlic Pickle",
     description: "Strong-flavoured garlic pickle prepared using traditional hill spices. A perfect accompaniment to any meal.",
     weight: "350g",
-    price: 259,
+    price: 299,
     category: "Pickle",
-    image: "https://images.unsplash.com/photo-1632239108217-f6268b8d2622?w=600&h=600&fit=crop",
+    image: "/images/products/garlic pickle.png",
     features: ["Garlic rich", "Mountain spices", "Traditional"]
-  }
+  },
+  {
+    id: 5,
+    name: "Ground Turmeric",
+    description: "Pure, high-curcumin ground turmeric sourced from the pristine Himalayan foothills. Sun-dried and processed traditionally to retain its natural oils and medicinal properties.",
+    weight: "250g",
+    price: 249,
+    category: "Spices",
+    image: "/images/products/ground-turmeric.png",
+    features: ["Pristine hills sourced", "High curcumin", "No additives"]
+  },
+  {
+    id: 6,
+    name: "Nimbu Khatta Mitha Pickle",
+    description: "Traditional sweet and sour hill lemon pickle, matured in sunlight using natural sweeteners and mountain spices. A perfect balance of tanginess and sweetness.",
+    weight: "350g",
+    price: 299,
+    category: "Pickle",
+    image: "/images/products/nimbu-khatta-mitha-pickle.png",
+    features: ["Sun-matured", "Sweet & sour", "Traditional Pahadi"]
+  },
+  {
+    id: 7,
+    name: "Papaya Chutney",
+    description: "Unique Himalayan papaya chutney crafted with sun-ripened papayas and a blend of aromatic hill spices. A delightful sweet and tangy accompaniment to any meal.",
+    weight: "350g",
+    price: 279,
+    category: "Chutney",
+    image: "/images/products/papaya-chutney.png",
+    features: ["Aromatic spices", "Handmade", "Traditional recipe"]
+  },
+
+
 ];
 
 // Why Choose Us features
